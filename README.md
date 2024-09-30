@@ -1,7 +1,7 @@
 
 # Tracker3
 
-A simple music editor for 4 and 8 channel Protracker modules.
+Fork of [Martin Cameron's simple music editor for 4 and 8 channel Protracker modules](https://github.com/martincameron/tracker3), with some additional keyboard shortcuts to make it more usable as an editor. 
 
 ![Screenshot](screenshot.png)
 
@@ -14,8 +14,6 @@ Notes can be entered using a virtual piano keyboard (QWERTY layout).
 Selections can be made by holding shift with the cursor keys, home and end.
 
 Pressing shift when keying a note will paste the copied selection with transpose.
-
-Pressing space will silence all channels.
 
 Other functions can be accessed using the function keys:
 
@@ -32,3 +30,15 @@ Other functions can be accessed using the function keys:
 * Shift + F10: Delete all unused patterns and instruments.
 
 Saved modules only include patterns up to the highest used in the sequence.
+
+---
+
+I love the portability of jarred apps, and the prevalence of java on enterprise machines makes them a fun way to play with toys even on 
+
+Now includes:
+* yellow outline to highlight focused gadget
+* additonal keys:
+    * spacebar: toggle playback
+    * period: cycle through input gadgets in top section
+    * comma: cycle backwards through input gadgets in top section
+    * forward slash: focus pattern editor
