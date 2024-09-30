@@ -1,3 +1,4 @@
+// Original by Martin Cameron, hatchet changes made by Dom. Search "copilot" to find areas where code has been modified
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;
@@ -392,6 +393,27 @@ public class Tracker3 extends Canvas implements KeyListener, MouseListener, Mous
 						optimize();
 					}
 					break;
+					// more microsoft hatchet
+				case KeyEvent.VK_COMMA:
+					cycleFocusBackwards();
+					break;
+				case KeyEvent.VK_PERIOD:
+						cycleFocus();
+					break;
+				case KeyEvent.VK_SLASH:
+						focusPatternGadget();
+					break;
+				case KeyEvent.VK_SPACE:
+					if( modPlay3.getSequencer() )
+					{
+						stop();
+					}
+					else
+					{
+						play();
+					}
+					break;
+					//end hatchet
 				default:
 					switch( gadType[ focus ] )
 					{
@@ -411,6 +433,8 @@ public class Tracker3 extends Canvas implements KeyListener, MouseListener, Mous
 					}
 					break;
 			}
+
+			
 		}
 		catch( Exception x )
 		{
@@ -427,7 +451,43 @@ public class Tracker3 extends Canvas implements KeyListener, MouseListener, Mous
 	public synchronized void keyTyped( KeyEvent e )
 	{
 	}
-	
+
+// code by Microsoft's copilot AI because I'm a hatchet-jobber
+
+	private static final Color HIGHLIGHT_COLOR = Color.YELLOW;
+
+	private void cycleFocus() {
+		do {
+			focus++;
+			if (focus >= GAD_COUNT) {
+				focus = 1; // Skip the 0th index as it is not a valid gadget
+			}
+		} while(gadType[focus] != 3 && gadType[focus] != 5);
+		gadRedraw[focus] = true;
+		System.out.println("Focus: " + focus + ", Gadget Type: " + gadType[focus]);
+		repaint();
+	}
+
+	private void cycleFocusBackwards() {
+		do {
+			focus--;
+			if (focus < 1) {
+				focus = GAD_COUNT -1; // skip the 0th index as it is not a valid gadget
+			}
+		} while (gadType[focus] != 3 && gadType[focus] != 5);
+		gadRedraw[focus] = true;
+		System.out.println("Focus: " + focus + ", Gadget Type: " + gadType[focus]);
+		repaint();
+	}
+
+	private void focusPatternGadget() {
+		focus = 1;
+		gadRedraw[focus] = true;
+		repaint();
+	}
+
+// end hatchetmark	
+
 	public synchronized void mouseClicked( MouseEvent e )
 	{
 	}
@@ -619,6 +679,19 @@ public class Tracker3 extends Canvas implements KeyListener, MouseListener, Mous
 			}
 		}
 		g.drawImage( image, 0, 0, null );
+
+
+		// more microsoft Copilot code hatchetwork, this one works great
+			// Draw the highlight around the focused gadget
+		if (focus > 0) {
+			g.setColor(HIGHLIGHT_COLOR);
+			int x = gadX[focus];
+			int y = gadY[focus];
+			int width = gadWidth[focus];
+			int height = gadHeight[focus];
+			g.drawRect(x - 2, y - 2, width + 4, height + 4);
+		}
+		// end hatchetmark
 	}
 	
 	public synchronized void update( Graphics g ) {
