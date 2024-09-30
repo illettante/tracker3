@@ -33,7 +33,7 @@ Saved modules only include patterns up to the highest used in the sequence.
 
 ---
 
-I love the portability of jarred apps, and the prevalence of java on enterprise machines makes them a fun way to play with toys even on 
+I love the portability of jarred apps, and the prevalence of java on enterprise machines makes them a fun way to play with toys even on a work laptop with a draconian app whitelisty policy.
 
 Now includes:
 * yellow outline to highlight focused gadget
@@ -42,3 +42,7 @@ Now includes:
     * period: cycle through input gadgets in top section
     * comma: cycle backwards through input gadgets in top section
     * forward slash: focus pattern editor
+
+## [Jarred app is here](https://github.com/illettante/tracker3/raw/refs/heads/master/build/tracker3.2.jar)
+
+You get a hyperlink instead of a release because this is not so much a version release as an act of vandalism.
