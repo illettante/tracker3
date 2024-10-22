@@ -1,4 +1,4 @@
-// Original by Martin Cameron, hatchet changes made by Dom. Search "copilot" to find areas where code has been modified
+// Original by Martin Cameron, hatchet changes made by Dom. Search "copilot" or "hatchet" to find areas where code has been modified
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;
@@ -25,7 +25,9 @@ import java.util.Arrays;
 
 public class Tracker3 extends Canvas implements KeyListener, MouseListener, MouseMotionListener, WindowListener
 {
-	public static final String VERSION = "Tracker3 (c)2020 mumart@gmail.com";
+	public static final String VERSION = "Tracker3.3 (apols to mumart@gmail.com)";
+
+	public boolean editMode = false; // hatchet I have no idea where the best place to initialise this one is so it's going at the top
 	
 	private static final long[] TOPAZ_8 = new long[]
 	{
@@ -237,6 +239,7 @@ public class Tracker3 extends Canvas implements KeyListener, MouseListener, Mous
 	private static final int GADNUM_SAVE_BUTTON = 30;
 	private static final int GADNUM_VER_LABEL = 31;
 	private static final int GADNUM_PLAY_BUTTON = 32;
+	private static final int GADNUM_PLOOP_BUTTON = 33; // more copilot hatchetry - assign an new gadget number
 	
 	private static final int MAX_CHANNELS = 8;
 	private static final int SAMPLING_RATE = 48000;
@@ -338,8 +341,9 @@ public class Tracker3 extends Canvas implements KeyListener, MouseListener, Mous
 		createTextbox( GADNUM_TITLE_TEXTBOX, 306 + 5 * 8 + 4, 4, 23 * 8, 28, "" );
 		createInstGadgets( 306, 36 );
 		createSequenceGadgets( 540, 4 );
-		createLabel( GADNUM_VER_LABEL, 200, 6 + 7 * 16 + 50, VERSION, TEXT_HIGHLIGHT_SELECTED );
-		createButton( GADNUM_PLAY_BUTTON, 540, 6 + 7 * 16 + 46, 96, 24, "Play" );
+		createLabel( GADNUM_VER_LABEL, 150, 6 + 7 * 16 + 50, VERSION, TEXT_HIGHLIGHT_SELECTED );
+		createButton( GADNUM_PLOOP_BUTTON, 540, 6 + 7 * 16 + 46, 46, 24, "Pat"); // copilot - add ploop button. 
+		createButton( GADNUM_PLAY_BUTTON, 590, 6 + 7 * 16 + 46, 46, 24, "Play" );
 		modPlay3.setPatternData( new byte[ MAX_CHANNELS * 4 * 64 * 128 ], MAX_CHANNELS );
 		modPlay3.setSequencer( false );
 		setInstrument( 1 );
@@ -349,6 +353,7 @@ public class Tracker3 extends Canvas implements KeyListener, MouseListener, Mous
 	
 	public synchronized void keyPressed( KeyEvent e )
 	{
+		int pat = getCurrentPattern();
 		try
 		{
 			switch( e.getKeyCode() )
@@ -393,7 +398,7 @@ public class Tracker3 extends Canvas implements KeyListener, MouseListener, Mous
 						optimize();
 					}
 					break;
-					// more microsoft hatchet
+					// more hatchet
 				case KeyEvent.VK_COMMA:
 					cycleFocusBackwards();
 					break;
@@ -402,17 +407,55 @@ public class Tracker3 extends Canvas implements KeyListener, MouseListener, Mous
 					break;
 				case KeyEvent.VK_SLASH:
 						focusPatternGadget();
+						setSelection( pat, 0, 0, 0, 0 );
 					break;
+				
 				case KeyEvent.VK_SPACE:
 					if( modPlay3.getSequencer() )
 					{
 						stop();
 					}
-					else
+					else if( e.isShiftDown() && modPlay3.getSequencer() )
+					{
+						stop();
+					}
+					else if( e.isShiftDown() )
 					{
 						play();
+						modPlay3.ploop = false;
+					}
+					else
+					{
+						play();	
+						modPlay3.ploop = true;
 					}
 					break;
+				/* this is proving a bit of a dead end*/
+				case KeyEvent.VK_OPEN_BRACKET:
+					stop();
+					boolean flip = true;
+					if( flip )
+					{
+					modPlay3.setSequencePos = modPlay3.currentSequencePos - 1;
+					flip = !flip;
+					gadRedraw[ GADNUM_PATTERN ] = true;
+					gadRedraw[ GADNUM_SEQ_LISTBOX] = true;
+					}
+					setSelection( pat, 0, 0, 0, 0 );			
+					break;
+				case KeyEvent.VK_CLOSE_BRACKET:
+					stop();
+					boolean flop = true;
+					if( flop )
+					{
+					modPlay3.setSequencePos( modPlay3.currentSequencePos + 1 );
+					flop = !flop;
+					gadRedraw[ GADNUM_PATTERN ] = true;
+					gadRedraw[ GADNUM_SEQ_LISTBOX ] = true;
+					}
+					setSelection( pat, 0, 0, 0, 0 );
+					break;
+					/**/
 					//end hatchet
 				default:
 					switch( gadType[ focus ] )
@@ -464,7 +507,7 @@ public class Tracker3 extends Canvas implements KeyListener, MouseListener, Mous
 			}
 		} while(gadType[focus] != 3 && gadType[focus] != 5);
 		gadRedraw[focus] = true;
-		System.out.println("Focus: " + focus + ", Gadget Type: " + gadType[focus]);
+		//System.out.println("Focus: " + focus + ", Gadget Type: " + gadType[focus]);
 		repaint();
 	}
 
@@ -476,7 +519,7 @@ public class Tracker3 extends Canvas implements KeyListener, MouseListener, Mous
 			}
 		} while (gadType[focus] != 3 && gadType[focus] != 5);
 		gadRedraw[focus] = true;
-		System.out.println("Focus: " + focus + ", Gadget Type: " + gadType[focus]);
+		//System.out.println("Focus: " + focus + ", Gadget Type: " + gadType[focus]);
 		repaint();
 	}
 
@@ -683,14 +726,39 @@ public class Tracker3 extends Canvas implements KeyListener, MouseListener, Mous
 
 		// more microsoft Copilot code hatchetwork, this one works great
 			// Draw the highlight around the focused gadget
-		if (focus > 0) {
-			g.setColor(HIGHLIGHT_COLOR);
-			int x = gadX[focus];
-			int y = gadY[focus];
-			int width = gadWidth[focus];
-			int height = gadHeight[focus];
-			g.drawRect(x - 2, y - 2, width + 4, height + 4);
+		if ( focus > 0 ) {
+			g.setColor( HIGHLIGHT_COLOR );
+			int x = gadX[ focus ];
+			int y = gadY[ focus ];
+			int width = gadWidth[ focus ];
+			int height = gadHeight [ focus ];
+			g.drawRect( x - 2, y - 2, width + 4, height + 4 );
 		}
+
+		// diy hatchet to draw red box for visual editmode flag
+
+		if ( focus == 1 ) {
+			editMode = true;
+		}
+		else editMode = false;
+		
+		if ( editMode ) {
+			g.setColor( Color.RED );
+			int x = gadX[ GADNUM_PATTERN ];
+			int y = gadY[ GADNUM_PATTERN ];
+			int width = gadWidth[ GADNUM_PATTERN ];
+			int height = gadHeight[ GADNUM_PATTERN ];
+			g.drawRect( x - 2, y - 2, width + 4, height + 4 );
+		}
+		else {
+			g.setColor( getBackground() );
+			int x = gadX[ GADNUM_PATTERN ];
+			int y = gadY[ GADNUM_PATTERN ];
+			int width = gadWidth[ GADNUM_PATTERN ];
+			int height = gadHeight[ GADNUM_PATTERN ];
+			g.drawRect( x - 2, y - 2, width + 4, height + 4 );		
+		}
+		
 		// end hatchetmark
 	}
 	
@@ -1434,6 +1502,8 @@ public class Tracker3 extends Canvas implements KeyListener, MouseListener, Mous
 			}
 		}
 	}
+
+	// EDIT MODE
 	
 	private void clickPattern( int gadnum, boolean shift )
 	{
@@ -1476,6 +1546,11 @@ public class Tracker3 extends Canvas implements KeyListener, MouseListener, Mous
 			modPlay3.setMute( mute );
 		}
 		gadRedraw[ GADNUM_PATTERN ] = true;
+	}
+
+	private void drawEditBox( Graphics G, int x, int y, int width, int height )
+	{
+		
 	}
 	
 	private static int mapEventKey( int[] keyMap, int eventKey )
@@ -1532,6 +1607,7 @@ public class Tracker3 extends Canvas implements KeyListener, MouseListener, Mous
 			{
 				case KEY_ESCAPE:
 					chn = -1;
+					focus = 3;
 					break;
 				case KEY_HOME:
 					row2 = 0;
@@ -1879,6 +1955,18 @@ public class Tracker3 extends Canvas implements KeyListener, MouseListener, Mous
 					deleteSeq();
 					break;
 				case GADNUM_PLAY_BUTTON:
+					modPlay3.ploop = false;
+					if( modPlay3.getSequencer() )
+					{
+						stop();
+					}
+					else
+					{
+						play();
+					}
+					break;
+				case GADNUM_PLOOP_BUTTON:
+					modPlay3.ploop = true;
 					if( modPlay3.getSequencer() )
 					{
 						stop();
@@ -2700,3 +2788,4 @@ public class Tracker3 extends Canvas implements KeyListener, MouseListener, Mous
 		}
 	}
 }
+
