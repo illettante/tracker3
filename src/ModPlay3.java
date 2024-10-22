@@ -1,6 +1,14 @@
 
 public class ModPlay3
 {
+	public int currentRow; // can be set and called from tracker3 class by several cases of keyPressed
+	public int currentSequencePos; // can be set and called from tracker3 class by several cases of keyPressed
+	public boolean ploop = false;
+	/* can be set and called from tracker3 class by the play and ploop button gadgets The "ploop" flag toggles the row method between playing patterns consecutively from the 
+	orderlist and looping the current pattern, is toggled by the Tracker3 class.
+	Ploop stands for 'pattern loop. I know it's an inscrutable variable name, but it's cute so i
+	don't care, this is my hobby roject ok, get your own.*/
+
 	private static final int MAX_SAMPLES = 32;
 	private static final int MAX_CHANNELS = 8;
 	private static final int FIXED_POINT_SHIFT = 13;
@@ -69,9 +77,7 @@ public class ModPlay3
 	private int[] channelTremoloDepth = new int[ MAX_CHANNELS ];
 	private int[] channelPatternLoopRow = new int[ MAX_CHANNELS ];
 	private int[] channelSampleOffset = new int[ MAX_CHANNELS ];
-	private int currentSequencePos;
 	private int nextSequencePos;
-	private int currentRow;
 	private int nextRow;
 	private int currentTick;
 	private int ticksPerRow;
@@ -628,7 +634,13 @@ public class ModPlay3
 		}
 		currentTick = ticksPerRow;
 		nextRow = currentRow + 1;
-		if( nextRow > 63 )
+		// here's where the ploop toggle comes into play
+		if( nextRow > 63 && ploop )
+		{
+			nextSequencePos = currentSequencePos;
+			nextRow = 0;
+		}
+		else if ( nextRow > 63 && !ploop )
 		{
 			nextRow = 0;
 			nextSequencePos = currentSequencePos + 1;
@@ -844,7 +856,7 @@ public class ModPlay3
 		return songEnd;
 	}
 	
-	private boolean tick()
+	public boolean tick()
 	{
 		boolean songEnd = false;
 		if( --currentTick <= 0 )
@@ -1243,3 +1255,4 @@ public class ModPlay3
 		}
 	}
 }
+
