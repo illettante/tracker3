@@ -46,6 +46,9 @@ __Now includes:__
     * forward slash: focus pattern editor and select top of pattern
     * escape (while in edit mode): focus on the directory text field
  * obnoxiously intrusive and unclear code commenting
+
+__Will include:__
+* modifier keys so you can use the above additional keys __and__ still type in text fields usefully, idiot
  
 __Might one day include:__
 * ~~ploop button to only play the current pattern instead of the whole sequence~~ done
