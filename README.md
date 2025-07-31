@@ -5,6 +5,10 @@ Fork of [Martin Cameron's simple music editor for 4 and 8 channel Protracker mod
 
  ![Screenshot](screenshot.png)
 
+ I love the portability of jarred apps, and the prevalence of java on enterprise machines makes them a fun way to play with toys even on a work laptop with a draconian app whitelisty policy.
+
+ ## Features:
+
 > Modules and samples can be loaded by pressing DIR and navigating to the file.
 >
 > Hold shift to load IFF-8SVX and signed 8-bit RAW samples with no file extension.
@@ -33,32 +37,27 @@ Fork of [Martin Cameron's simple music editor for 4 and 8 channel Protracker mod
 >
 > Saved modules only include patterns up to the highest used in the sequence.
 
-I love the portability of jarred apps, and the prevalence of java on enterprise machines makes them a fun way to play with toys even on a work laptop with a draconian app whitelisty policy.
-
-__Now includes:__
+## New and possibly superfluous additions:
 * yellow outline to highlight focused gadget
-* red outline around pattern panel during editing
+* red outline around pattern panel when focused
 * additonal keys:
     * spacebar: toggle playback
     * shift + spacebar: toggle ploopback (playback but it loops the current pettern instead of the whole sequence)
-    * period: cycle through input gadgets in top section
-    * comma: cycle backwards through input gadgets in top section
-    * forward slash: focus pattern editor and select top of pattern
+    * ctrl + semicolon: cycle through input gadgets in top section
+    * ctrl + shift + semicolon: cycle backwards through input gadgets in top section
+    * Ctrl + forward slash: focus pattern editor and select top of pattern
     * escape (while in edit mode): focus on the directory text field
  * obnoxiously intrusive and unclear code commenting
-
-__Will include:__
-* modifier keys so you can use the above additional keys __and__ still type in text fields usefully, idiot
  
 __Might one day include:__
 * ~~ploop button to only play the current pattern instead of the whole sequence~~ done
-* better keyboard interaction so you can hit enter to trigger button gadgets
+* more keyboard interaction so you can hit enter to trigger button gadgets
 * ~~auditioning samples~~ actually nah, this isn't a daw, it's a desktop toy. You have better ways of auditioning samples on your OS.
 * ~~replacing mumart's copyright notice with an attribution/apology~~
-* forward slash key also recentring the playhead on row 0
+* ctrl + forward slash key also recentring the playhead on row 0
 * me getting smart enough to diagnose and fix bug with ploop where occasionally it plays the first loop at double speed
 * better 'edit mode' flag - currently it just outlines red when the pattern panel is focused. It'd be good to do the full protracker and have it red only when the pattern panel accepting input
-* keyboard shortcuts for cycling through the patterns. Half implemented, but not useful without playhead following, and maybe an indicator for what the current pattern is somewhere.
+* keyboard shortcuts for cycling through the patterns. Half implemented, but not useful without playhead following, and maybe an indicator for what the current pattern is somewhere -like a highlight in the pattern list.
 
 ## Jarred app is here
 
