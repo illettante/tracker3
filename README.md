@@ -61,4 +61,4 @@ __Might one day include:__
 
 ## Jarred app is here
 
-You get a [hyperlink](https://github.com/illettante/tracker3/raw/refs/heads/master/build/tracker3.3.jar) instead of a release because this is not so much a version release as an act of vandalism.
+You get a [hyperlink](https://github.com/illettante/tracker3/raw/refs/heads/master/build/tracker3.4.jar) instead of a release because this is not so much a version release as an act of vandalism.
