@@ -40,24 +40,26 @@ Fork of [Martin Cameron's simple music editor for 4 and 8 channel Protracker mod
 ## New and possibly superfluous additions:
 * yellow outline to highlight focused gadget
 * red outline around pattern panel when focused
-* additonal keys:
-    * spacebar: toggle playback
+* ~~additonal keys:
+    * ~~spacebar: toggle playback
     * shift + spacebar: toggle ploopback (playback but it loops the current pettern instead of the whole sequence)
     * ctrl + semicolon: cycle through input gadgets in top section
     * ctrl + shift + semicolon: cycle backwards through input gadgets in top section
     * Ctrl + forward slash: focus pattern editor and select top of pattern
     * escape (while in edit mode): focus on the directory text field
+ * _Ok so now i've learned that putting the vk events in switch statements when modifiers are pressed and NOT explicating what happens when you press them without modifiers, makes them not function without modifiers, so they don't type any more. Doy. Next version will just implement impulsetracker-style controls where every ████ing thing is done with the Fn keys.  
+      
  * obnoxiously intrusive and unclear code commenting
  
-__Might one day include:__
+__~~Might one day~~ probably won't include:__
 * ~~ploop button to only play the current pattern instead of the whole sequence~~ done
-* more keyboard interaction so you can hit enter to trigger button gadgets
+* more keyboard interaction so you can hit enter to trigger button gadgets?
 * ~~auditioning samples~~ actually nah, this isn't a daw, it's a desktop toy. You have better ways of auditioning samples on your OS.
 * ~~replacing mumart's copyright notice with an attribution/apology~~
-* ctrl + forward slash key also recentring the playhead on row 0
+* ~~ctrl + forward slash key~~ whatever key it end sup being also recentring the playhead on row 0
 * me getting smart enough to diagnose and fix bug with ploop where occasionally it plays the first loop at double speed
 * better 'edit mode' flag - currently it just outlines red when the pattern panel is focused. It'd be good to do the full protracker and have it red only when the pattern panel accepting input
-* keyboard shortcuts for cycling through the patterns. Half implemented, but not useful without playhead following, and maybe an indicator for what the current pattern is somewhere -like a highlight in the pattern list.
+* ~~keyboard shortcuts for cycling through the patterns.~~  Half implemented, but not useful without playhead following, and maybe an indicator for what the current pattern is somewhere -like a highlight in the pattern list.
 
 ## Jarred app is here
 
